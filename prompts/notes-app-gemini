@@ -1,0 +1,136 @@
+Working Prompt. 
+
+
+I want to build a simple note-taking web application integrating Firebase for authentication and data storage, and Google Analytics for tracking user behavior. This application is intended for a beginner audience, so simplicity and ease of use are key.
+
+**Application Name:** "My Notes”
+
+**Firebase Configuration:** // PASTE YOUR FIREBASE CONFIGURATION HERE
+
+**Features:**
+
+1.  **User Authentication:**
+    *   Users should be able to sign up using email and password.
+     Users should be able to sign up using Gmail Authentication.
+    *   Users should be able to log in to their account.
+    *   Users should be able to log out.
+    *   The application should have a 'Login' and 'Signup' section.
+    *   If the user is not logged in, they should not be able to view the notes.
+    *   Once the user is logged in, The logged in username should be visible in the UI.     
+
+2.  **Note Creation:**
+    *   A user should be able to create a new note by clicking a 'New Note' or similar button.
+    *   The note creation screen will have a text input area (a simple textarea) for the note content.
+    *   The application should include a save button to save the note.
+     The note should be saved to firestore and should note be saved in browser cache for the session. (Every time a user logs in. If he has saved notes) It should be shown in the UI
+
+3.  **Note Display:**
+    *   The app should display a list of the user's saved notes.
+    *   Each note in the list should show the first few lines of the content.
+    *   Each note in the list should have an 'Edit' and a 'Delete' button.
+    *   The application should have an empty state showing a "No Notes Found" message if there are no saved notes.
+
+4. **Note Editing:**
+    *   Clicking 'Edit' should open the note in the text area for editing
+    *   Users should be able to click 'Save' to persist the changes
+
+5. **Note Deletion:**
+    *   Clicking 'Delete' should delete the note from the database.
+    *   The deletion should be instant without any confirmation.
+
+6.  **Data Storage:**
+    *   Use Firebase Firestore to store all notes, associating each note with the correct user.
+    *   Create necessary Firestore rules. 
+
+// ANALYTICS INTEGRATION IS OPTIONAL YOU CAN REMOVE THIS PART IF YOU DONT WANT IT
+7.  **Google Analytics Integration:**
+
+    *   **Page Views:** Track page views for each main route of the application (e.g., Login/Signup, Note List).
+    *   For Analytics, Lets have a src/utils/analytics.ts which defines all Analytics Events enum with specific event names following GA4 naming conventions, Lets initialize Google Analytics (Should create and load the analytics script), Initialize the datalayer, Initialize gtag with enhanced settings. Lets also add enhanced event tracking with better type safety and parameter validation. Also Helper function to categorize events
+    *   The analytics implementation should be called using a hook in a file called src/hooks/useAnalytics.ts. Example below 
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { trackPageView } from '../utils/analytics';
+
+export const useAnalytics = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Track page view whenever the route changes
+    trackPageView(location.pathname + location.search);
+  }, [location]);
+};
+    *   The hook should be invoked by a provider file. Example below
+import React from 'react';
+import { useAnalytics } from '../hooks/useAnalytics';
+
+interface AnalyticsProviderProps {
+  children: React.ReactNode;
+}
+
+export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({ children }) => {
+  useAnalytics(); // Now this hook is used within Router context
+  return <>{children}</>;
+};
+
+    *   The provider should be called in App.tsx. Example:
+   useEffect(() => { initializeAnalytics().catch(console.error); }, []);
+
+The Router should include the AnalyticsProvider. Example:
+  return (
+    <Router>
+      <AnalyticsProvider>
+﻿ ﻿
+Analytics tagging instructions from Google Analytics Dashboard <!-- Google tag (gtag.js) --> <script async src="https://www.googletagmanager.com/gtag/js?id=G-4N6TQNGSJG"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-4N6TQNGSJG'); </script>
+    *   **User Events:** Track the following user events:
+        *   Successful User Sign Up (event category: "User", action: "Sign Up")
+        *   Successful User Login (event category: "User", action: "Login")
+        *   Successful User Logout (event category: "User", action: "Logout")
+        *   Creation of a New Note (event category: "Note", action: "Create")
+        *   Saving of an Edited Note (event category: "Note", action: "Edit")
+        *   Deletion of a Note (event category: "Note", action: "Delete")
+
+
+**Application Flow:**
+
+1.  **Initial Load:**
+    *   If the user is not logged in, display the login/signup page.
+    *   If the user is logged in, display the list of their notes.
+    * Track page view for the current route.
+2.  **Login/Signup:**
+    *   After login or signup, redirect the user to the note list view.
+    *   Track user sign-up or login events
+    * Track page view for the current route.
+3.  **New Note:**
+    *   Clicking "New Note" should clear the text area.
+4.  **Viewing Notes:**
+    *   The note list view should be the main screen when the user is logged in.
+5. **Note Save:**
+    * Track note creation or edit
+6. **Note Delete:**
+    * Track note delete event
+
+**Aesthetics:**
+
+1.  **Layout:**
+    *   Use a clean, simple, and responsive layout.
+    *   A list of notes should be on the left or the center and the textarea should be on the right.
+    *   Make it mobile-friendly.
+2.  **Typography:**
+    *   Use a readable font (e.g., Arial, Open Sans, or Roboto).
+    *   Use appropriate font sizes for headings and body text.
+3.  **Color Palette:**
+    *   Use a light background with dark text for readability.
+    *   Use a primary color for buttons and accents. (Suggest a light blue or green for beginner-friendliness).
+4.  **User Interface:**
+    *   Keep buttons and interactive elements visually clear.
+    *   Use simple icons where appropriate.
+    *   Ensure the UI is intuitive for a novice user.
+
+**Additional Notes:**
+
+*   The initial design should be functional, and aesthetics can be improved later.
+*   Keep code organization and best practices in mind so it will be easier to explain to the Udemy audience.
+*   Generate well-commented code for easy understanding.
+*   Use a simple naming convention for all elements.
+*   The application should be suitable for both web and mobile.
