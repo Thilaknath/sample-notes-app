@@ -54,3 +54,20 @@
 10) Deploy to firebase -> node_modules/.bin/firebase deploy --only hosting
 
 11) firebaserc (Consists project configuration) and firebase.json (Consists server configuration capabilities, Setup custom redirects)
+
+
+=== Deploy to Preview Channel
+1) Deplpy to preview channel -> node_modules/.bin/firebase hosting:channel:deploy test --expires 1h
+2) To delete a channel -> node_modules/.bin/firebase hosting:channel:delete test
+
+=== Setup Github Actions for CI/CD (Switch to new branch)
+3) node_modules/.bin/firebase init hosting:github
+
+? For which GitHub repository would you like to set up a GitHub workflow? (format: user/repository) <YOUR REPOSITORY NAME>
+? Set up the workflow to run a build script before every deploy? Yes
+? What script should be run before every deploy? npm ci && npm run build
+? Set up automatic deployment to your site's live channel when a PR is merged? Yes
+? What is the name of the GitHub branch associated with your site's live channel? main
+
+4) Copy Firebase Configs as secrets in Github Repository
+5) Create a new commit. Push the changes to the repository
