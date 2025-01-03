@@ -1,0 +1,56 @@
+1) Install firebase locally     -> npm i firebase-tools -D
+2) Login to firebase            -> node_modules/.bin/firebase login
+3) Initialize firebase          -> node_modules/.bin/firebase init hosting
+4) What do you want to use as your public directory? -> dist
+5) Configure as a single-page app (rewrite all urls to /index.html)? -> Yes
+6) Set up automatic builds and deploys with GitHub? -> node_modules
+7) Initilaize emulators -> node_modules/.bin/firebase init emulators
+
+
+=== Emulators Setup
+? Which Firebase emulators do you want to set up? Press Space to select emulators, then Enter to confirm your choices. Hosting Emulator
+? Which port do you want to use for the hosting emulator? 5033
+? Would you like to enable the Emulator UI? Yes
+? Which port do you want to use for the Emulator UI (leave empty to use any available port)? 
+? Would you like to download the emulators now? Yes
+
+8) Modify firebase.json with following config 
+
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "hosting": {
+      "port": 5033
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    },
+    "singleProjectMode": true
+  }
+}
+
+9) Start emulators -> node_modules/.bin/firebase emulators:start
+
+10) Deploy to firebase -> node_modules/.bin/firebase deploy --only hosting
+
+11) firebaserc (Consists project configuration) and firebase.json (Consists server configuration capabilities, Setup custom redirects)
